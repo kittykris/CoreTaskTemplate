@@ -11,7 +11,7 @@ public class Util {
     private static final String PASSWORD = "12345";
 
 
-    public Connection getJDBCConnection() {
+    public static Connection getJDBCConnection() {
         Connection connection = null;
         try {
             Class.forName(MYSQL_DRIVER);

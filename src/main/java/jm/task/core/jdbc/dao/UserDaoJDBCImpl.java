@@ -16,83 +16,73 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void createUsersTable() {
-        if (connection != null) {
-            String sql = "CREATE TABLE IF NOT EXISTS Users(id BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL, " +
-                    "name VARCHAR(30) NOT NULL, lastName VARCHAR(30) NOT NULL, age INT(3) NOT NULL);";
-            try (Statement statement = connection.createStatement()) {
-                statement.executeUpdate(sql);
-            } catch (SQLException e) {
-                System.out.println("Can't create table.");
-            }
+        String sql = "CREATE TABLE IF NOT EXISTS Users(id BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL, " +
+                "name VARCHAR(30) NOT NULL, lastName VARCHAR(30) NOT NULL, age INT(3) NOT NULL);";
+        try (Statement statement = connection.createStatement()) {
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            System.out.println("Can't create table.");
         }
     }
 
     public void dropUsersTable() {
-        if (connection != null) {
-            String sql = "DROP TABLE IF EXISTS Users;";
-            try (Statement statement = connection.createStatement()) {
-                statement.executeUpdate(sql);
-            } catch (SQLException e) {
-                System.out.println("Can't drop table.");
-            }
+        String sql = "DROP TABLE IF EXISTS Users;";
+        try (Statement statement = connection.createStatement()) {
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            System.out.println("Can't drop table.");
         }
     }
 
     public void saveUser(String name, String lastName, byte age) {
-        if (connection != null) {
-            String sql = "INSERT INTO Users(name, lastName, age) VALUES (?, ?, ?)";
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-                preparedStatement.setString(1, name);
-                preparedStatement.setString(2, lastName);
-                preparedStatement.setInt(3, age);
-                preparedStatement.executeUpdate();
-            } catch (SQLException e) {
-                System.out.println("Can't insert User into table.");
-            }
+        String sql = "INSERT INTO Users(name, lastName, age) VALUES (?, ?, ?)";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, lastName);
+            preparedStatement.setInt(3, age);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Can't insert User into table.");
         }
     }
 
     public void removeUserById(long id) {
-        if (connection != null) {
-            String sql = "DELETE FROM Users WHERE id = ?;";
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-                preparedStatement.setLong(1, id);
-                preparedStatement.executeUpdate();
-            } catch (SQLException e) {
-                System.out.println("There is no such ID.");
-            }
+
+        String sql = "DELETE FROM Users WHERE id = ?;";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setLong(1, id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("There is no such ID.");
         }
     }
 
     public List<User> getAllUsers() {
         List<User> list = new ArrayList<>();
-        if (connection != null) {
-            String sql = "SELECT * FROM Users";
-            try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                ResultSet result = statement.executeQuery();
-                while (result.next()) {
-                    User user = new User();
-                    user.setId(result.getLong(1));
-                    user.setName(result.getString(2));
-                    user.setLastName(result.getString(3));
-                    user.setAge(result.getByte(4));
-                    list.add(user);
-                }
-            } catch (SQLException e) {
-                System.out.println("There is no table.");
+        String sql = "SELECT * FROM Users";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            ResultSet result = statement.executeQuery();
+            while (result.next()) {
+                User user = new User();
+                user.setId(result.getLong(1));
+                user.setName(result.getString(2));
+                user.setLastName(result.getString(3));
+                user.setAge(result.getByte(4));
+                list.add(user);
             }
+        } catch (SQLException e) {
+            System.out.println("There is no table.");
         }
         return list;
     }
 
     public void cleanUsersTable() {
-        if (connection != null) {
-            String sql = "DELETE FROM Users";
-            try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.executeUpdate();
-            } catch (SQLException e) {
-                System.out.println("Can't clean table.");
-            }
+
+        String sql = "DELETE FROM Users";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Can't clean table.");
         }
     }
 }

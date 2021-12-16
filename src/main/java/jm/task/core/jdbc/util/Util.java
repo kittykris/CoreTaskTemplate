@@ -9,9 +9,9 @@ public class Util {
     private static final String MYSQL_URL = "jdbc:mysql://localhost:3306/mydb";
     private static final String USER = "root";
     private static final String PASSWORD = "12345";
-    private static Connection connection;
+    private static Connection connection = makeJDBCConnection();
 
-    public static Connection getJDBCConnection() {
+    private static Connection makeJDBCConnection() {
         if (connection == null) {
             try {
                 Class.forName(MYSQL_DRIVER);
@@ -20,6 +20,10 @@ public class Util {
                 System.out.println("Problem with connection");
             }
         }
+        return connection;
+    }
+
+    public static Connection getJDBCConnection() {
         return connection;
     }
 }
